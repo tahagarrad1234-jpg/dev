@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMAL - Premium Watches</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; }
+        
+        /* Header & Navigation */
+        header { 
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); 
+            color: white; 
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 32px; font-weight: bold; letter-spacing: 3px; color: #ffd700; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: white; text-decoration: none; transition: color 0.3s; }
+        .nav-links a:hover { color: #ffd700; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1200x400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h2 { font-size: 48px; margin-bottom: 10px; }
+        .hero p { font-size: 20px; margin-bottom: 20px; }
+        .hero-btn { background: #ffd700; color: #1a1a1a; padding: 12px 30px; border: none; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        .hero-btn:hover { background: #ffed4e; }
+
+        /* Main Container */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        /* Section Title */
+        .section-title { text-align: center; font-size: 36px; margin-bottom: 40px; color: #1a1a1a; }
+        
+        /* Products Grid */
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .product { 
+            background: white; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        
+        .product-img { 
+            width: 100%; 
+            height: 250px; 
+            background: linear-gradient(135deg, #e0e0e0, #f5f5f5); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+        
+        .product-info { padding: 20px; }
+        .product-name { font-size: 20px; font-weight: bold; color: #1a1a1a; margin-bottom: 8px; }
+        .product-desc { color: #666; font-size: 14px; margin-bottom: 12px; }
+        .product-rating { color: #ffd700; margin-bottom: 10px; }
+        .price { color: #e74c3c; font-weight: bold; font-size: 24px; margin-bottom: 15px; }
+        
+        .add-cart-btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #1a1a1a; 
+            color: #ffd700; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .add-cart-btn:hover { background: #333; }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+        footer p { margin: 10px 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { gap: 15px; }
+            .hero h2 { font-size: 32px; }
+            .section-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">⌚ AMAL</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#products">Watches</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#cart">🛒 Cart</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h2>Timeless Elegance Meets Modern Style</h2>
+        <p>Discover Our Exclusive Collection of Premium Watches</p>
+        <button class="hero-btn">Shop Now</button>
+    </section>
+
+    <!-- Products Section -->
+    <div class="container">
+        <h2 class="section-title" id="products">Our Collections</h2>
+        <div class="products">
+            
+            <!-- Product 1 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Classic Leather</h3>
+                    <p class="product-desc">Elegant design with genuine leather strap</p>
+                    <p class="product-rating">★★★★★ (245 reviews)</p>
+                    <p class="price">$149.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Sport Chronograph</h3>
+                    <p class="product-desc">Perfect for active lifestyle with stopwatch</p>
+                    <p class="product-rating">★★★★☆ (189 reviews)</p>
+                    <p class="price">$199.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Gold Luxury</h3>
+                    <p class="product-desc">Premium gold plated with diamond markers</p>
+                    <p class="product-rating">★★★★★ (312 reviews)</p>
+                    <p class="price">$299.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Smart Watch Pro</h3>
+                    <p class="product-desc">Latest technology with fitness tracking</p>
+                    <p class="product-rating">★★★★★ (567 reviews)</p>
+                    <p class="price">$249.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Vintage Steel</h3>
+                    <p class="product-desc">Stainless steel with timeless design</p>
+                    <p class="product-rating">★★★★☆ (198 reviews)</p>
+                    <p class="price">$179.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product">
+                <div class="product-img">⌚</div>
+                <div class="product-info">
+                    <h3 class="product-name">Minimalist White</h3>
+                    <p class="product-desc">Simple elegance, minimalist aesthetic</p>
+                    <p class="product-rating">★★★★★ (423 reviews)</p>
+                    <p class="price">$129.99</p>
+                    <button class="add-cart-btn">Add to Cart</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <p><strong>AMAL Premium Watches</strong></p>
+        <p>Email: info@amalwatches.com | Phone: +1 (800) 123-4567</p>
+        <p>&copy; 2024 AMAL Watches. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Simple cart functionality
+        document.querySelectorAll('.add-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productName = this.parentElement.querySelector('.product-name').textContent;
+                alert(productName + ' added to cart!');
+            });
+        });
+    </script>
+</body>
+</html>
