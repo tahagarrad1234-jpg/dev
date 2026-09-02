@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Premium Watch Shop"
+description = "A polished watch storefront with curated product discovery, search, filters, cart interactions, and a responsive shopping experience for premium timepieces."
+version = "1.0.0"
+id = "artifacts/premium-watch-shop"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18503
+
+[services.development]
+run = "pnpm --filter @workspace/premium-watch-shop run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/premium-watch-shop", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/premium-watch-shop/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18503"
+BASE_PATH = "/"
