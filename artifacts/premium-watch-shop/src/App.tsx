@@ -60,10 +60,10 @@ function Home() {
 
   return (
     <div className="atelier-app">
-      <div className="announcement"><span>Complimentary insured shipping on every Horologe piece</span><span className="announcement-mark">EST. 1987&nbsp;&nbsp; / &nbsp;&nbsp;GENEVA — TOKYO</span></div>
+      <div className="announcement"><span>Complimentary insured shipping on every AMAL piece</span><span className="announcement-mark">EST. 1987&nbsp;&nbsp; / &nbsp;&nbsp;GENEVA — TOKYO</span></div>
       <header className="site-header">
         <button className="mobile-toggle" aria-label="Open navigation" data-testid="button-open-navigation" onClick={() => setMobileMenu(!mobileMenu)}><span /><span /></button>
-        <a href="#top" className="wordmark" data-testid="link-home"><span>H</span> HOROLOGE</a>
+        <a href="#top" className="wordmark" data-testid="link-home"><span>A</span> AMAL</a>
         <nav className={`main-nav ${mobileMenu ? 'is-open' : ''}`} aria-label="Main navigation">
           <a href="#collection" data-testid="link-collection" onClick={() => setMobileMenu(false)}>The collection</a>
           <a href="#atelier" data-testid="link-atelier" onClick={() => setMobileMenu(false)}>Our atelier</a>
@@ -92,9 +92,9 @@ function Home() {
         </section>
 
         <section className="manifesto" id="atelier">
-          <div className="manifesto-index">00 / WHY HOROLOGE</div>
+          <div className="manifesto-index">00 / WHY AMAL</div>
           <div className="manifesto-copy"><h2>For the days<br /><em>worth marking.</em></h2><p>We look for the details that don’t ask for attention: the turn of a crown, the cool weight of steel, a dial that becomes yours over time. Every piece is selected with a patient eye.</p><a href="#journal" data-testid="link-read-story">Read our story <ArrowUpRight size={15} /></a></div>
-          <div className="manifesto-stamp"><Watch size={28} strokeWidth={1} /><span>HOROLOGE<br />OBJECTS<br />WITH A PULSE</span></div>
+          <div className="manifesto-stamp"><Watch size={28} strokeWidth={1} /><span>AMAL<br />OBJECTS<br />WITH A PULSE</span></div>
         </section>
 
         <section className="collection-section" id="collection">
@@ -110,14 +110,14 @@ function Home() {
         </section>
 
         <section className="craft-section" id="journal">
-          <div className="craft-image"><img src={products[2].image} alt="A watch resting on a textured surface" loading="lazy" /><span className="image-label">THE HOROLOGE STANDARD / 02</span></div>
-          <div className="craft-copy"><div className="eyebrow"><span className="eyebrow-line" /> The horologe standard</div><h2>Made to be<br /><em>lived in.</em></h2><p>Small-batch makers. Honest materials. Movements you can feel. We believe a watch should wear in, not wear out.</p><div className="standard-list"><div><span>01</span><b>Serviceable movements</b><small>Built for a lifetime of keeping</small></div><div><span>02</span><b>Traceable materials</b><small>Nothing hidden behind the shine</small></div><div><span>03</span><b>Five-year guarantee</b><small>We stand behind the pieces we choose</small></div></div></div>
+          <div className="craft-image"><img src={products[2].image} alt="A watch resting on a textured surface" loading="lazy" /><span className="image-label">THE AMAL STANDARD / 02</span></div>
+          <div className="craft-copy"><div className="eyebrow"><span className="eyebrow-line" /> The Amal standard</div><h2>Made to be<br /><em>lived in.</em></h2><p>Small-batch makers. Honest materials. Movements you can feel. We believe a watch should wear in, not wear out.</p><div className="standard-list"><div><span>01</span><b>Serviceable movements</b><small>Built for a lifetime of keeping</small></div><div><span>02</span><b>Traceable materials</b><small>Nothing hidden behind the shine</small></div><div><span>03</span><b>Five-year guarantee</b><small>We stand behind the pieces we choose</small></div></div></div>
         </section>
 
-        <section className="closing-note"><div className="closing-quote">“The pleasure is<br /><em>in the choosing.</em>”</div><div className="closing-details"><span>HOROLOGE NOTES / 01</span><p>A small dispatch on watches, makers, and the rituals around time. No noise, once a month.</p><button onClick={() => announce('You are on the list')} data-testid="button-join-notes">Join the notes <ArrowUpRight size={15} /></button></div></section>
+        <section className="closing-note"><div className="closing-quote">“The pleasure is<br /><em>in the choosing.</em>”</div><div className="closing-details"><span>AMAL NOTES / 01</span><p>A small dispatch on watches, makers, and the rituals around time. No noise, once a month.</p><button onClick={() => announce('You are on the list')} data-testid="button-join-notes">Join the notes <ArrowUpRight size={15} /></button></div></section>
       </main>
 
-      <footer><a href="#top" className="wordmark" data-testid="link-footer-home"><span>H</span> HOROLOGE</a><p>Objects for keeping time.</p><div className="footer-links"><a href="#collection" data-testid="link-footer-collection">Collection</a><a href="#atelier" data-testid="link-footer-atelier">Atelier</a><button onClick={() => announce('Care team: hello@horologe.co')} data-testid="button-contact">Contact</button></div><small>© 2024 Horologe. All considered.</small></footer>
+      <footer><a href="#top" className="wordmark" data-testid="link-footer-home"><span>A</span> AMAL</a><p>Objects for keeping time.</p><div className="footer-links"><a href="#collection" data-testid="link-footer-collection">Collection</a><a href="#atelier" data-testid="link-footer-atelier">Atelier</a><button onClick={() => announce('Care team: info@amalwatches.com')} data-testid="button-contact">Contact</button></div><small>© 2024 AMAL Watches. All considered.</small></footer>
 
       {notice && <div className="notice" role="status" data-testid="status-notice">{notice}</div>}
       {cartOpen && <div className="drawer-backdrop" onClick={() => setCartOpen(false)}><aside className="cart-drawer" onClick={(event) => event.stopPropagation()} aria-label="Shopping bag"><div className="drawer-header"><div><span className="drawer-kicker">YOUR SELECTION</span><h2>Shopping bag <small>{cartCount}</small></h2></div><button onClick={() => setCartOpen(false)} aria-label="Close shopping bag" data-testid="button-close-cart"><X size={20} /></button></div>{cart.length > 0 ? <><div className="cart-items">{cart.map((item) => <div className="cart-item" key={item.id} data-testid={`cart-item-${item.id}`}><img src={item.image} alt="" /><div className="cart-item-info"><span>{item.collection}</span><h3>{item.name}</h3><strong>{money(item.price * item.quantity)}</strong><div className="quantity"><button onClick={() => changeQuantity(item.id, -1)} aria-label={`Decrease ${item.name} quantity`} data-testid={`button-decrease-${item.id}`}><Minus size={13} /></button><span data-testid={`text-quantity-${item.id}`}>{item.quantity}</span><button onClick={() => changeQuantity(item.id, 1)} aria-label={`Increase ${item.name} quantity`} data-testid={`button-increase-${item.id}`}><Plus size={13} /></button></div></div></div>)}</div><div className="drawer-summary"><div><span>Subtotal</span><strong data-testid="text-cart-subtotal">{money(subtotal)}</strong></div><p>Shipping and taxes calculated at checkout.</p><button className="checkout-button" onClick={() => announce('Checkout is reserved for the next chapter')} data-testid="button-checkout">Continue to checkout <ArrowUpRight size={16} /></button><button className="continue-button" onClick={() => setCartOpen(false)} data-testid="button-continue-shopping">Continue browsing</button></div></> : <div className="cart-empty"><div className="empty-bag"><ShoppingBag size={25} strokeWidth={1.2} /></div><h3>Your bag is waiting.</h3><p>Begin with a piece that keeps calling you back.</p><button className="checkout-button" onClick={() => setCartOpen(false)} data-testid="button-discover-pieces">Discover the collection <ArrowUpRight size={16} /></button></div>}</aside></div>}
