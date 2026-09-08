@@ -10,6 +10,12 @@ out-tsc
 
 # dependencies
 node_modules
+artifacts/api-server/data/
+
+# local environment files
+.env
+.env.*
+!.env.example
 
 # IDEs and editors
 /.idea

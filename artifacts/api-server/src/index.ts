@@ -1,13 +1,14 @@
 import app from "./app";
 import { logger } from "./lib/logger";
+import { supabaseEnabled } from "./lib/auth-store";
 
-const rawPort = process.env["PORT"];
-
-if (!rawPort) {
+if (!supabaseEnabled) {
   throw new Error(
-    "PORT environment variable is required but was not provided.",
+    "Supabase is not configured. Copy .env.example to .env and set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
   );
 }
+
+const rawPort = process.env["PORT"] || "4000";
 
 const port = Number(rawPort);
 

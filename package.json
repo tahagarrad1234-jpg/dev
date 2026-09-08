@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "dev": "concurrently -k -n API,WEB -c blue,green \"pnpm --filter @workspace/api-server dev:local\" \"pnpm --filter @workspace/premium-watch-shop dev\"",
+    "dev:api": "pnpm --filter @workspace/api-server dev:local",
+    "dev:web": "pnpm --filter @workspace/premium-watch-shop dev",
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
@@ -10,9 +13,11 @@
   },
   "private": true,
   "dependencies": {
-    "@replit/connectors-sdk": "^0.4.1"
+    "@replit/connectors-sdk": "^0.4.1",
+    "@supabase/supabase-js": "^2.116.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "prettier": "^3.9.6",
     "typescript": "~5.9.3"
   }
