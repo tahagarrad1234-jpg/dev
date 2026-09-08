@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm --filter @workspace/premium-watch-shop build",
+  "outputDirectory": "artifacts/premium-watch-shop/dist/public",
+  "installCommand": "pnpm install --frozen-lockfile"
+}
