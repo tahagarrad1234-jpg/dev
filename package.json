@@ -10,6 +10,7 @@
     "typecheck": "pnpm -r run typecheck"
   },
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "dependencies": {
     "@replit/connectors-sdk": "^0.4.1",
     "@supabase/supabase-js": "^2.116.0"
