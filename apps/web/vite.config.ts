@@ -38,12 +38,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(
-        import.meta.dirname,
-        "..",
-        "..",
-        "attached_assets",
-      ),
     },
     dedupe: ["react", "react-dom"],
   },
@@ -57,6 +51,12 @@ export default defineConfig({
     strictPort: true,
     host: "0.0.0.0",
     allowedHosts: true,
+    proxy: {
+      "/api": {
+        target: process.env.API_URL || "http://localhost:4000",
+        changeOrigin: true,
+      },
+    },
     fs: {
       strict: true,
     },

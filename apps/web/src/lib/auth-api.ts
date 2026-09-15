@@ -27,4 +27,5 @@ export const authApi = {
   register: (name: string, email: string, password: string) =>
     request<AuthResponse>("/auth/register", { name, email, password }),
   me: () => request<AuthResponse>("/auth/me"),
+  logout: () => request<{ success: boolean }>("/auth/logout", {}),
 };

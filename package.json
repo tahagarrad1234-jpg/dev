@@ -6,7 +6,6 @@
     "dev": "concurrently -k -n API,WEB -c blue,green \"pnpm --filter @workspace/api dev:local\" \"pnpm --filter @workspace/web dev\"",
     "dev:api": "pnpm --filter @workspace/api dev:local",
     "dev:web": "pnpm --filter @workspace/web dev",
-    "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
     "build": "pnpm -r run build",
     "typecheck": "pnpm -r run typecheck"
   },
