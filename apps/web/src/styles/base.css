@@ -6,6 +6,7 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -14,6 +15,8 @@
     color: var(--ink);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   button, input, select, textarea {
@@ -47,61 +50,72 @@
   .hover-elevate {
     position: relative;
     z-index: 0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
   }
 
   .hover-elevate:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
   }
 }
 
+/* ── Keyframes ───────────────────────────────────────────── */
 @keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes enter-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes enter-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes float-in {
-  from {
-    opacity: 0;
-    transform: translateY(24px) rotate(1deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(0);
-  }
+  from { opacity: 0; transform: translateY(32px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes drawer-in {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
 }
 
 @keyframes notice-in {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 10px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
+  from { opacity: 0; transform: translate(-50%, 14px) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, 0)    scale(1); }
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes halo-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1);    opacity: 0.6; }
+  50%       { transform: translateX(-50%) scale(1.04); opacity: 1;   }
+}
+
+@keyframes ring-rotate {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to   { transform: translateX(-50%) rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes stamp-spin {
+  from { transform: rotate(12deg); }
+  to   { transform: rotate(372deg); }
 }

@@ -9,7 +9,7 @@ import {
   findUserByEmail,
   publicUser,
   userFromSession,
-} from "../lib/auth-store";
+} from "../../lib/auth-store";
 
 const router: IRouter = Router();
 const sessionCookie = "amal_session";
