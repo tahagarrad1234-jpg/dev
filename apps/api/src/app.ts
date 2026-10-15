@@ -1,12 +1,18 @@
 import express, { type Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 import { pinoHttp } from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
+import { config } from "./config";
+import { errorHandler } from "./middlewares/error-handler";
 
 const app: Express = express();
 
+app.set("trust proxy", 1);
+
+app.use(helmet());
 app.use(
   pinoHttp({
     logger,
@@ -28,14 +34,32 @@ app.use(
 );
 app.use(
   cors({
-    origin: process.env.WEB_ORIGIN || "http://localhost:5173",
+    origin: config.WEB_ORIGIN,
     credentials: true,
   }),
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.json({
+    limit: "100kb",
+    verify: (req: any, _res, buf) => {
+      if (req.originalUrl?.includes("webhook")) {
+        req.rawBody = buf;
+      }
+    },
+  }),
+);
+app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(cookieParser());
 
 app.use("/api", router);
 
+// JSON 404 handler for unmatched /api/* routes
+app.use("/api", (_req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
+});
+
+// Global error handler
+app.use(errorHandler);
+
 export default app;
+

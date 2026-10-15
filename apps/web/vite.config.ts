@@ -38,6 +38,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
+      "@workspace/shared": path.resolve(
+        import.meta.dirname,
+        "../../packages/shared/src",
+      ),
     },
     dedupe: ["react", "react-dom"],
   },
@@ -45,6 +49,15 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "wouter", "@tanstack/react-query"],
+          icons: ["lucide-react"],
+        },
+      },
+    },
   },
   server: {
     port,

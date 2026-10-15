@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-ssr
+.cache
+.local
+pnpm-lock.yaml
+package-lock.json
+drizzle
+*.tsbuildinfo

@@ -2,5 +2,9 @@
   "framework": "vite",
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/web build",
-  "outputDirectory": "apps/web/dist/public"
+  "outputDirectory": "apps/web/dist/public",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

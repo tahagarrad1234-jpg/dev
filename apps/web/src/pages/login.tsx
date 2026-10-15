@@ -1,24 +1,27 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, LockKeyhole } from "lucide-react";
-import { authApi } from "@/lib/auth-api";
+import { useAuth } from "@/features/auth/use-auth";
+import { useLocation } from "wouter";
 
 type LoginPageProps = { onSuccess?: () => void };
 
 export default function LoginPage({ onSuccess }: LoginPageProps) {
   const [error, setError] = useState("");
+  const { login } = useAuth();
+  const [, setLocation] = useLocation();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     const form = event.currentTarget;
     const data = new FormData(form);
-    authApi
-      .login(String(data.get("email")), String(data.get("password")))
-      .then(() => {
-        if (onSuccess) onSuccess();
-        else window.location.href = "/";
-      })
-      .catch((requestError: Error) => setError(requestError.message));
+    try {
+      await login(String(data.get("email")), String(data.get("password")));
+      if (onSuccess) onSuccess();
+      else setLocation("/");
+    } catch (requestError: any) {
+      setError(requestError.message);
+    }
   };
 
   return (
@@ -76,7 +79,7 @@ export default function LoginPage({ onSuccess }: LoginPageProps) {
               <label className="auth-check">
                 <input type="checkbox" /> <span>Recordarme</span>
               </label>
-              <a href="mailto:info@amalwatches.com">
+              <a href="/forgot-password">
                 Has olvidado tu contrasena?
               </a>
             </div>

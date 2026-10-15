@@ -1,7 +1,14 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: "customer" | "admin";
+};
 
 type AuthResponse = {
-  user: { id: string; name: string; email: string; role: "customer" | "admin" };
+  user: AuthUser;
 };
 
 async function request<T>(path: string, body?: unknown): Promise<T> {

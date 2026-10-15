@@ -1,0 +1,85 @@
+{
+  "common": {
+    "brandName": "AMAL Watches",
+    "tagline": "Contemporary Horology",
+    "loading": "Loading pieces...",
+    "error": "Error loading catalog",
+    "retry": "Retry",
+    "cart": "Cart",
+    "favorites": "Wishlist",
+    "account": "My Account",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "register": "Create account",
+    "admin": "Administration",
+    "search": "Search timepieces...",
+    "addToCart": "Add to selection",
+    "outOfStock": "Sold out",
+    "inStock": "In stock",
+    "onlyLeft": "Only {{count}} pieces remaining",
+    "checkout": "Proceed to checkout",
+    "viewDetails": "View timepiece",
+    "backToStore": "Return to atelier",
+    "language": "Language"
+  },
+  "categories": {
+    "All pieces": "All pieces",
+    "Dress": "Dress",
+    "Field": "Field",
+    "Diver": "Diver",
+    "Chronograph": "Chronograph"
+  },
+  "nav": {
+    "collection": "Collection",
+    "manifesto": "Manifesto",
+    "atelier": "The Atelier",
+    "journal": "Journal",
+    "contact": "Contact"
+  },
+  "hero": {
+    "kicker": "CONTEMPORARY HAUTE HORLOGERIE",
+    "headline": "Measure time with architectural serenity.",
+    "subheadline": "Rigorous mechanical calibers, restrained proportions, and hand-finished details engineered to outlive transient trends.",
+    "cta": "Explore Collection",
+    "secondaryCta": "Discover the Atelier"
+  },
+  "manifesto": {
+    "kicker": "DESIGN PRINCIPLES",
+    "quote": "Pleasure resides in the quiet confidence of well-tempered mechanics.",
+    "author": "Atelier AMAL — Barcelona / Geneva"
+  },
+  "cart": {
+    "title": "Your Selection",
+    "empty": "Your cart is empty",
+    "emptySub": "Explore our curated catalog and reserve exclusive numbered editions.",
+    "subtotal": "Subtotal",
+    "shippingCalculated": "Insured delivery and taxes calculated at checkout.",
+    "freeShippingEligible": "Your order qualifies for complimentary insured delivery.",
+    "freeShippingRemaining": "Add {{amount}} more for complimentary delivery.",
+    "remove": "Remove",
+    "total": "Estimated Total"
+  },
+  "footer": {
+    "newsletterTitle": "The Atelier Journal",
+    "newsletterDesc": "Bi-monthly essays on micromechanics, sober aesthetics, and priority invitations to new numbered editions.",
+    "emailPlaceholder": "your@email.com",
+    "subscribe": "Subscribe",
+    "subscribeSuccess": "Subscription confirmed. Welcome to the Journal.",
+    "rights": "AMAL Watches. All rights reserved. Handcrafted numbered timepieces.",
+    "legalNotice": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Sale",
+    "cookies": "Cookie Policy"
+  },
+  "product": {
+    "specs": "Technical Specifications",
+    "movement": "Movement",
+    "caseSize": "Case Diameter",
+    "waterResistance": "Water Resistance",
+    "strap": "Strap",
+    "warranty": "5-Year Guarantee",
+    "shippingNotice": "Fully insured delivery with tracking within 24-48 hours",
+    "share": "Share",
+    "copied": "Link copied to clipboard"
+  }
+}

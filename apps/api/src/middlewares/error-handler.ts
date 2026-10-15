@@ -1,7 +1,8 @@
-import { ErrorRequestHandler } from "express";
+import type { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
+import { config } from "../config";
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   req.log.error(err);
 
   if (err instanceof ZodError) {
@@ -12,7 +13,19 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     return;
   }
 
-  res.status(err.status || 500).json({
-    error: err.message || "Error interno del servidor",
+  const statusCode =
+    typeof err.status === "number" && err.status >= 400 && err.status < 600
+      ? err.status
+      : 500;
+
+  const isProduction = config.NODE_ENV === "production";
+  const errorMessage =
+    isProduction && statusCode === 500
+      ? "Error interno del servidor"
+      : err.message || "Error interno del servidor";
+
+  res.status(statusCode).json({
+    error: errorMessage,
   });
 };
+

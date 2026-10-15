@@ -1,246 +1,276 @@
-import { randomBytes } from "node:crypto";
+import { randomBytes, createHash } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { config } from "../config";
+import { logger } from "./logger";
+
+export type UserRole = "customer" | "admin";
 
 export type UserRecord = {
   id: string;
   name: string;
   email: string;
-  passwordHash: string | null;
-  role: "customer" | "admin";
+  role: UserRole;
   createdAt: string;
 };
 
-type SupabaseUser = {
+export type PublicUser = {
   id: string;
   name: string;
   email: string;
-  password_hash: string | null;
-  role: "customer" | "admin";
+  role: UserRole;
+};
+
+type SupabaseUserRow = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
   created_at: string;
 };
 
-type SupabaseSession = { user_id: string };
+type SupabaseSessionRow = {
+  user_id: string;
+};
 
-const sessionLifetime = 1000 * 60 * 60 * 24 * 7;
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-export const supabaseEnabled = Boolean(supabaseUrl && supabaseKey);
+export const SESSION_LIFETIME_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
-const supabase: SupabaseClient | undefined = supabaseEnabled
-  ? createClient(supabaseUrl!, supabaseKey!, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    })
-  : undefined;
+export const supabase: SupabaseClient = createClient(
+  config.SUPABASE_URL,
+  config.SUPABASE_SERVICE_ROLE_KEY,
+  {
+    auth: { autoRefreshToken: false, persistSession: false },
+  },
+);
 
-// In-memory fallback stores
-const inMemoryUsers: Map<string, UserRecord> = new Map();
-const inMemorySessions: Map<string, { userId: string; expiresAt: Date }> = new Map();
-
-function initDefaultAdmin(): UserRecord {
-  const email = (process.env.ADMIN_EMAIL || "admin@amal.local").toLowerCase();
-  const admin: UserRecord = {
-    id: "admin-local-1",
-    name: "Amal Admin",
-    email,
-    passwordHash: process.env.ADMIN_PASSWORD || "admin1234",
-    role: "admin",
-    createdAt: new Date().toISOString(),
-  };
-  inMemoryUsers.set(email, admin);
-  return admin;
+export function hashToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
 }
 
-initDefaultAdmin();
-
-function getSupabase() {
-  if (!supabase) {
-    throw new Error(
-      "Supabase is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
-    );
-  }
-  return supabase;
-}
-
-function fromSupabaseUser(user: SupabaseUser): UserRecord {
+function fromSupabaseUser(user: SupabaseUserRow): UserRecord {
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    passwordHash: user.password_hash,
     role: user.role,
     createdAt: user.created_at,
   };
 }
 
-export function publicUser(user: UserRecord) {
-  return { id: user.id, name: user.name, email: user.email, role: user.role };
+export function publicUser(user: UserRecord): PublicUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
 }
 
-export async function findUserByEmail(email: string) {
-  const normalizedEmail = email.toLowerCase();
-  const local = inMemoryUsers.get(normalizedEmail);
-  if (local) return local;
+export async function findUserByEmail(email: string): Promise<UserRecord | null> {
+  const normalizedEmail = email.toLowerCase().trim();
+  const { data, error } = await supabase
+    .from("amal_users")
+    .select("id, name, email, role, created_at")
+    .eq("email", normalizedEmail)
+    .maybeSingle();
 
-  if (supabase) {
-    try {
-      const { data, error } = await getSupabase()
-        .from("amal_users")
-        .select("id,name,email,password_hash,role,created_at")
-        .eq("email", normalizedEmail)
-        .maybeSingle();
-      if (!error && data) return fromSupabaseUser(data as SupabaseUser);
-    } catch {
-      // Fallback
-    }
+  if (error) {
+    logger.error({ err: error, email: normalizedEmail }, "findUserByEmail database error");
+    throw error;
   }
-  return undefined;
+
+  if (!data) return null;
+  return fromSupabaseUser(data as SupabaseUserRow);
 }
 
 export async function createUser(
   name: string,
   email: string,
   password: string,
-) {
-  const normalizedEmail = email.toLowerCase();
-  const user: UserRecord = {
-    id: "usr_" + randomBytes(8).toString("hex"),
-    name,
+): Promise<UserRecord> {
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Create user in Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: normalizedEmail,
-    passwordHash: password,
-    role: "customer",
-    createdAt: new Date().toISOString(),
-  };
-  inMemoryUsers.set(normalizedEmail, user);
+    password,
+    email_confirm: true,
+    user_metadata: { name },
+  });
 
-  if (supabase) {
-    try {
-      const authUser = await getSupabase().auth.admin.createUser({
+  if (authError || !authData.user) {
+    logger.error({ err: authError, email: normalizedEmail }, "Supabase auth.admin.createUser failed");
+    throw authError || new Error("Error al crear usuario en Supabase Auth");
+  }
+
+  const userId = authData.user.id;
+  const createdAt = new Date().toISOString();
+
+  // Insert profile record into amal_users
+  const { data: userData, error: insertError } = await supabase
+    .from("amal_users")
+    .insert({
+      id: userId,
+      name,
+      email: normalizedEmail,
+      role: "customer",
+      created_at: createdAt,
+    })
+    .select("id, name, email, role, created_at")
+    .single();
+
+  if (insertError || !userData) {
+    logger.error({ err: insertError, userId }, "Failed to insert user into amal_users table");
+    // Roll back auth user to maintain consistency
+    await supabase.auth.admin.deleteUser(userId).catch((delErr) => {
+      logger.error({ err: delErr, userId }, "Failed to delete orphaned auth user during rollback");
+    });
+    throw insertError || new Error("Error al guardar perfil de usuario");
+  }
+
+  return fromSupabaseUser(userData as SupabaseUserRow);
+}
+
+export async function authenticateUser(
+  email: string,
+  password: string,
+): Promise<UserRecord | null> {
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Verify credentials exclusively using Supabase Auth
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    email: normalizedEmail,
+    password,
+  });
+
+  if (authError || !authData.user) {
+    return null;
+  }
+
+  const userId = authData.user.id;
+  const { data: userData, error: userError } = await supabase
+    .from("amal_users")
+    .select("id, name, email, role, created_at")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (userError) {
+    logger.error({ err: userError, userId }, "Failed to fetch user profile after auth");
+    throw userError;
+  }
+
+  if (!userData) {
+    // Backfill user profile if missing in amal_users
+    const name =
+      (authData.user.user_metadata?.name as string) ||
+      normalizedEmail.split("@")[0] ||
+      "Usuario";
+    const { data: newRow, error: insertError } = await supabase
+      .from("amal_users")
+      .insert({
+        id: userId,
+        name,
         email: normalizedEmail,
-        password,
-        email_confirm: true,
-        user_metadata: { name },
-      });
-      if (authUser.data?.user) {
-        user.id = authUser.data.user.id;
-        await getSupabase().from("amal_users").insert({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          password_hash: null,
-          role: user.role,
-          created_at: user.createdAt,
-        });
-      }
-    } catch {
-      // fallback
+        role: "customer",
+      })
+      .select("id, name, email, role, created_at")
+      .single();
+
+    if (insertError || !newRow) {
+      logger.error({ err: insertError, userId }, "Failed to backfill missing amal_users profile");
+      throw insertError || new Error("Error al inicializar perfil de usuario");
     }
+    return fromSupabaseUser(newRow as SupabaseUserRow);
   }
 
-  return user;
+  return fromSupabaseUser(userData as SupabaseUserRow);
 }
 
-export async function authenticateUser(email: string, password: string) {
-  const normalizedEmail = email.toLowerCase();
+export async function createSession(userId: string): Promise<string> {
+  const rawToken = randomBytes(32).toString("hex");
+  const tokenHash = hashToken(rawToken);
+  const expiresAt = new Date(Date.now() + SESSION_LIFETIME_MS).toISOString();
 
-  // 1. Direct admin check (instant)
-  const adminEmail = (process.env.ADMIN_EMAIL || "admin@amal.local").toLowerCase();
-  const adminPass = process.env.ADMIN_PASSWORD || "admin1234";
-  if (normalizedEmail === adminEmail && password === adminPass) {
-    return inMemoryUsers.get(adminEmail) || initDefaultAdmin();
+  const { error } = await supabase.from("amal_sessions").insert({
+    token_hash: tokenHash,
+    user_id: userId,
+    expires_at: expiresAt,
+  });
+
+  if (error) {
+    logger.error({ err: error, userId }, "Failed to create session in amal_sessions");
+    throw error;
   }
 
-  // 2. In-memory check
-  const localUser = inMemoryUsers.get(normalizedEmail);
-  if (localUser && localUser.passwordHash === password) {
-    return localUser;
-  }
-
-  // 3. Supabase check
-  if (supabase) {
-    try {
-      const { data, error } = await getSupabase().auth.signInWithPassword({
-        email: normalizedEmail,
-        password,
-      });
-      if (!error && data?.user) {
-        const found = await findUserByEmail(data.user.email ?? normalizedEmail);
-        if (found) return found;
-      }
-    } catch {
-      // Fallback
-    }
-  }
-
-  return undefined;
+  return rawToken;
 }
 
-export async function ensureAdmin() {
-  initDefaultAdmin();
-}
+export async function userFromSession(rawToken?: string): Promise<UserRecord | null> {
+  if (!rawToken || typeof rawToken !== "string") return null;
 
-export async function createSession(userId: string) {
-  const token = randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + sessionLifetime);
+  const tokenHash = hashToken(rawToken);
+  const now = new Date().toISOString();
 
-  inMemorySessions.set(token, { userId, expiresAt });
+  const { data: session, error: sessionError } = await supabase
+    .from("amal_sessions")
+    .select("user_id")
+    .eq("token_hash", tokenHash)
+    .gt("expires_at", now)
+    .maybeSingle();
 
-  if (supabase) {
-    try {
-      await getSupabase()
-        .from("amal_sessions")
-        .insert({ token, user_id: userId, expires_at: expiresAt.toISOString() });
-    } catch {
-      // fallback
-    }
-  }
-  return token;
-}
-
-export async function userFromSession(token?: string) {
-  if (!token) return undefined;
-
-  // 1. Check in-memory session (instant)
-  const memSession = inMemorySessions.get(token);
-  if (memSession && memSession.expiresAt > new Date()) {
-    for (const u of inMemoryUsers.values()) {
-      if (u.id === memSession.userId) return u;
-    }
+  if (sessionError) {
+    logger.error({ err: sessionError }, "Error querying amal_sessions");
+    throw sessionError;
   }
 
-  // 2. Try Supabase
-  if (supabase) {
-    try {
-      const { data: session, error } = await getSupabase()
-        .from("amal_sessions")
-        .select("user_id")
-        .eq("token", token)
-        .gt("expires_at", new Date().toISOString())
-        .maybeSingle();
-      if (!error && session) {
-        const { data: user, error: userError } = await getSupabase()
-          .from("amal_users")
-          .select("id,name,email,password_hash,role,created_at")
-          .eq("id", (session as SupabaseSession).user_id)
-          .maybeSingle();
-        if (!userError && user) return fromSupabaseUser(user as SupabaseUser);
-      }
-    } catch {
-      // Fallback
-    }
+  if (!session) return null;
+
+  const { data: user, error: userError } = await supabase
+    .from("amal_users")
+    .select("id, name, email, role, created_at")
+    .eq("id", (session as SupabaseSessionRow).user_id)
+    .maybeSingle();
+
+  if (userError) {
+    logger.error({ err: userError, userId: (session as SupabaseSessionRow).user_id }, "Error querying user from session");
+    throw userError;
   }
 
-  return undefined;
+  if (!user) return null;
+  return fromSupabaseUser(user as SupabaseUserRow);
 }
 
-export async function deleteSession(token?: string) {
-  if (!token) return;
-  inMemorySessions.delete(token);
-  if (supabase) {
-    try {
-      await getSupabase()
-        .from("amal_sessions")
-        .delete()
-        .eq("token", token);
-    } catch {}
+export async function deleteSession(rawToken?: string): Promise<void> {
+  if (!rawToken || typeof rawToken !== "string") return;
+
+  const tokenHash = hashToken(rawToken);
+  const { error } = await supabase
+    .from("amal_sessions")
+    .delete()
+    .eq("token_hash", tokenHash);
+
+  if (error) {
+    logger.error({ err: error }, "Failed to delete session");
+    throw error;
   }
 }
+
+export async function deleteExpiredSessions(): Promise<void> {
+  const now = new Date().toISOString();
+  const { error } = await supabase
+    .from("amal_sessions")
+    .delete()
+    .lte("expires_at", now);
+
+  if (error) {
+    logger.error({ err: error }, "Failed to clean up expired sessions");
+  }
+}
+
+// Periodic cleanup of expired sessions every 1 hour (unref'd to allow clean process exit)
+const CLEANUP_INTERVAL_MS = 1000 * 60 * 60;
+const cleanupTimer = setInterval(() => {
+  deleteExpiredSessions().catch((err) => {
+    logger.error({ err }, "Periodic session cleanup error");
+  });
+}, CLEANUP_INTERVAL_MS);
+cleanupTimer.unref();

@@ -1,35 +1,32 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, Check, LockKeyhole } from "lucide-react";
-import { authApi } from "@/lib/auth-api";
+import { useAuth } from "@/features/auth/use-auth";
 
 type RegisterPageProps = { onSuccess?: () => void };
 
 export default function RegisterPage({ onSuccess }: RegisterPageProps) {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const { register } = useAuth();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     const form = event.currentTarget;
     const data = new FormData(form);
-    authApi
-      .register(
-        [data.get("firstName"), data.get("lastName")]
-          .map((value) => String(value).trim())
-          .filter(Boolean)
-          .join(" "),
-        String(data.get("email")),
-        String(data.get("password")),
-      )
-      .then(() => {
-        setSubmitted(true);
-        onSuccess?.();
-      })
-      .catch((requestError: Error) => {
-        setSubmitted(false);
-        setError(requestError.message);
-      });
+    const name = [data.get("firstName"), data.get("lastName")]
+      .map((value) => String(value).trim())
+      .filter(Boolean)
+      .join(" ");
+
+    try {
+      await register(name, String(data.get("email")), String(data.get("password")));
+      setSubmitted(true);
+      onSuccess?.();
+    } catch (requestError: any) {
+      setSubmitted(false);
+      setError(requestError.message);
+    }
   };
 
   return (

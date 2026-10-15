@@ -1915,6 +1915,54 @@ footer small { text-align: right; }
   .auth-visual { min-height: 320px; padding: 26px 7vw; }
   .auth-visual::before { display: none; }
   .auth-brand { display: none; }
-  .auth-mobile-brand { display: flex; margin-right: auto; }
   .auth-panel { min-height: calc(100vh - 320px); padding: 22px 7vw 30px; }
 }
+
+/* ==========================================================================
+   Accessibility (WCAG 2.2 AA) & Focus Management
+   ========================================================================== */
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1.5rem;
+  background: var(--ink, #121212);
+  color: var(--bone, #f6f3eb);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+  z-index: 99999;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus-visible {
+  top: 1.5rem;
+  outline: 2px solid var(--oxblood, #8b263e);
+  outline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--oxblood, #8b263e);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-ticker {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

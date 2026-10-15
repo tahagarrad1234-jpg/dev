@@ -1,11 +1,11 @@
-import { integer, pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 import { amalProducts } from "./products";
 import { amalUsers } from "./users";
 
 export const amalFavorites = pgTable(
   "amal_favorites",
   {
-    userId: text("user_id")
+    userId: uuid("user_id")
       .notNull()
       .references(() => amalUsers.id, { onDelete: "cascade" }),
     productId: integer("product_id")

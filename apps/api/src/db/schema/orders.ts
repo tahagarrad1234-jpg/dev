@@ -1,20 +1,34 @@
+import { sql } from "drizzle-orm";
 import {
+  check,
   index,
   integer,
-  numeric,
   pgTable,
   serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { amalProducts } from "./products";
 import { amalUsers } from "./users";
+
+export const ORDER_STATUSES = [
+  "pending",
+  "paid",
+  "preparing",
+  "shipped",
+  "delivered",
+  "cancelled",
+  "refunded",
+] as const;
+
+export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const amalOrders = pgTable(
   "amal_orders",
   {
     id: text("id").primaryKey(),
-    userId: text("user_id").references(() => amalUsers.id, {
+    userId: uuid("user_id").references(() => amalUsers.id, {
       onDelete: "set null",
     }),
     customerName: text("customer_name").notNull(),
@@ -25,12 +39,14 @@ export const amalOrders = pgTable(
     postalCode: text("postal_code").notNull(),
     country: text("country").notNull(),
     paymentMethod: text("payment_method").notNull(),
-    total: numeric("total", { precision: 12, scale: 2, mode: "number" }).notNull(),
-    status: text("status", {
-      enum: ["Pago", "Preparando", "Enviado"],
-    })
+    stripePaymentIntentId: text("stripe_payment_intent_id"),
+    status: text("status", { enum: ORDER_STATUSES })
       .notNull()
-      .default("Pago"),
+      .default("pending"),
+    subtotalCents: integer("subtotal_cents").notNull(),
+    shippingCents: integer("shipping_cents").notNull().default(0),
+    taxCents: integer("tax_cents").notNull().default(0),
+    totalCents: integer("total_cents").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -38,6 +54,7 @@ export const amalOrders = pgTable(
   (table) => [
     index("amal_orders_user_id_idx").on(table.userId),
     index("amal_orders_created_at_idx").on(table.createdAt),
+    index("amal_orders_status_idx").on(table.status),
   ],
 );
 
@@ -48,18 +65,17 @@ export const amalOrderItems = pgTable(
     orderId: text("order_id")
       .notNull()
       .references(() => amalOrders.id, { onDelete: "cascade" }),
-    productId: serial("product_id").references(() => amalProducts.id, {
+    productId: integer("product_id").references(() => amalProducts.id, {
       onDelete: "set null",
     }),
     productName: text("product_name").notNull(),
-    unitPrice: numeric("unit_price", {
-      precision: 12,
-      scale: 2,
-      mode: "number",
-    }).notNull(),
+    unitPriceCents: integer("unit_price_cents").notNull(),
     quantity: integer("quantity").notNull(),
   },
-  (table) => [index("amal_order_items_order_id_idx").on(table.orderId)],
+  (table) => [
+    index("amal_order_items_order_id_idx").on(table.orderId),
+    check("amal_order_items_quantity_positive", sql`${table.quantity} > 0`),
+  ],
 );
 
 export const orderIdPrefix = "AM-";

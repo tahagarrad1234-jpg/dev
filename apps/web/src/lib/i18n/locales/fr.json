@@ -1,0 +1,85 @@
+{
+  "common": {
+    "brandName": "AMAL Watches",
+    "tagline": "Horlogerie Contemporaine",
+    "loading": "Chargement des pièces...",
+    "error": "Erreur lors du chargement",
+    "retry": "Réessayer",
+    "cart": "Panier",
+    "favorites": "Favoris",
+    "account": "Mon Compte",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "Créer un compte",
+    "admin": "Administration",
+    "search": "Rechercher une pièce...",
+    "addToCart": "Ajouter à la sélection",
+    "outOfStock": "Épuisé",
+    "inStock": "En stock",
+    "onlyLeft": "Plus que {{count}} pièces disponibles",
+    "checkout": "Commander",
+    "viewDetails": "Découvrir la pièce",
+    "backToStore": "Retour à la boutique",
+    "language": "Langue"
+  },
+  "categories": {
+    "All pieces": "Toutes les pièces",
+    "Dress": "Habillée",
+    "Field": "Militaire",
+    "Diver": "Plongeuse",
+    "Chronograph": "Chronographe"
+  },
+  "nav": {
+    "collection": "Collection",
+    "manifesto": "Manifeste",
+    "atelier": "L'Atelier",
+    "journal": "Journal",
+    "contact": "Contact"
+  },
+  "hero": {
+    "kicker": "HAUTE HORLOGERIE CONTEMPORAINE",
+    "headline": "Mesurer le temps avec une sérénité architecturale.",
+    "subheadline": "Calibres mécaniques exigeants, proportions épurées et finitions manuelles conçues pour défier les modes éphémères.",
+    "cta": "Explorer la Collection",
+    "secondaryCta": "Découvrir l'Atelier"
+  },
+  "manifesto": {
+    "kicker": "PRINCIPES DE CONCEPTION",
+    "quote": "Le plaisir réside dans la discrétion d'une mécanique parfaitement réglée.",
+    "author": "Atelier AMAL — Barcelone / Genève"
+  },
+  "cart": {
+    "title": "Votre Sélection",
+    "empty": "Votre panier est vide",
+    "emptySub": "Explorez notre collection et réservez des pièces numérotées exclusives.",
+    "subtotal": "Sous-total",
+    "shippingCalculated": "Livraison assurée et taxes calculées lors de la commande.",
+    "freeShippingEligible": "Votre commande bénéficie de la livraison assurée offerte.",
+    "freeShippingRemaining": "Ajoutez {{amount}} de plus pour bénéficier de la livraison offerte.",
+    "remove": "Retirer",
+    "total": "Total estimé"
+  },
+  "footer": {
+    "newsletterTitle": "Le Carnet de l'Atelier",
+    "newsletterDesc": "Essais bimestriels sur la micromécanique, l'épure esthétique et accès prioritaire aux nouvelles séries numérotées.",
+    "emailPlaceholder": "votre@email.com",
+    "subscribe": "S'abonner",
+    "subscribeSuccess": "Inscription confirmée. Bienvenue au Carnet.",
+    "rights": "AMAL Watches. Tous droits réservés. Pièces numérotées façonnées à la main.",
+    "legalNotice": "Mentions Légales",
+    "privacy": "Confidentialité",
+    "terms": "Conditions de Vente",
+    "cookies": "Politique de Cookies"
+  },
+  "product": {
+    "specs": "Spécifications Techniques",
+    "movement": "Calibre",
+    "caseSize": "Diamètre du boîtier",
+    "waterResistance": "Étanchéité",
+    "strap": "Bracelet",
+    "warranty": "Garantie 5 Ans",
+    "shippingNotice": "Livraison sécurisée avec remise contre signature sous 24-48h",
+    "share": "Partager",
+    "copied": "Lien copié dans le presse-papiers"
+  }
+}

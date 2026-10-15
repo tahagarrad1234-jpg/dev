@@ -1,0 +1,85 @@
+{
+  "common": {
+    "brandName": "AMAL Watches",
+    "tagline": "Relojería Contemporánea",
+    "loading": "Cargando piezas...",
+    "error": "Error al cargar los datos",
+    "retry": "Reintentar",
+    "cart": "Cesta",
+    "favorites": "Favoritos",
+    "account": "Mi Cuenta",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "register": "Registrarse",
+    "admin": "Administración",
+    "search": "Buscar piezas...",
+    "addToCart": "Añadir a la cesta",
+    "outOfStock": "Agotado",
+    "inStock": "En stock",
+    "onlyLeft": "Solo quedan {{count}} unidades",
+    "checkout": "Tramitar pedido",
+    "viewDetails": "Ver pieza",
+    "backToStore": "Volver a la tienda",
+    "language": "Idioma"
+  },
+  "categories": {
+    "All pieces": "Todas las piezas",
+    "Dress": "Vestir",
+    "Field": "Campo",
+    "Diver": "Buceo",
+    "Chronograph": "Cronógrafo"
+  },
+  "nav": {
+    "collection": "Colección",
+    "manifesto": "Manifiesto",
+    "atelier": "El Atelier",
+    "journal": "Diario",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "kicker": "ALTA RELOJERÍA CONTEMPORÁNEA",
+    "headline": "Mide el tiempo con serenidad arquitectónica.",
+    "subheadline": "Calibres de manufactura rigurosa, proporciones sobrias y acabados a mano para piezas destinadas a perdurar.",
+    "cta": "Explorar Colección",
+    "secondaryCta": "Conocer el Atelier"
+  },
+  "manifesto": {
+    "kicker": "PRINCIPIOS DE DISEÑO",
+    "quote": "El placer reside en la discreción de la mecánica bien templada.",
+    "author": "Atelier AMAL — Barcelona / Ginebra"
+  },
+  "cart": {
+    "title": "Cesta de compra",
+    "empty": "Su selección está vacía",
+    "emptySub": "Descubra nuestra colección y reserve piezas exclusivas.",
+    "subtotal": "Subtotal",
+    "shippingCalculated": "Envío asegurado e impuestos calculados al tramitar.",
+    "freeShippingEligible": "Su pedido incluye envío asegurado gratuito.",
+    "freeShippingRemaining": "Añada {{amount}} más para obtener envío gratuito.",
+    "remove": "Retirar",
+    "total": "Total estimado"
+  },
+  "footer": {
+    "newsletterTitle": "El Cuaderno del Atelier",
+    "newsletterDesc": "Ensayos bimestrales sobre micromecánica, diseño contemporáneo y acceso preferente a nuevas series numeradas.",
+    "emailPlaceholder": "su@email.com",
+    "subscribe": "Suscribirse",
+    "subscribeSuccess": "Suscripción confirmada. Bienvenido al Cuaderno.",
+    "rights": "AMAL Watches. Todos los derechos reservados. Fabricación artesanal numerada.",
+    "legalNotice": "Aviso Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos de Venta",
+    "cookies": "Cookies"
+  },
+  "product": {
+    "specs": "Especificaciones Técnicas",
+    "movement": "Mecanismo",
+    "caseSize": "Diámetro",
+    "waterResistance": "Hermeticidad",
+    "strap": "Correa",
+    "warranty": "Garantía de 5 años",
+    "shippingNotice": "Envío asegurado con seguimiento en 24-48 horas",
+    "share": "Compartir",
+    "copied": "Enlace copiado al portapapeles"
+  }
+}

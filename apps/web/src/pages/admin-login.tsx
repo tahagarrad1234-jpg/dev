@@ -1,20 +1,23 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, LockKeyhole, ShieldCheck } from "lucide-react";
-import { authApi } from "@/lib/auth-api";
+import { useAuth } from "@/features/auth/use-auth";
+import { useLocation } from "wouter";
 
 export default function AdminLoginPage() {
   const [error, setError] = useState("");
+  const { adminLogin } = useAuth();
+  const [, setLocation] = useLocation();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setError("");
-    authApi
-      .adminLogin(String(data.get("email")), String(data.get("password")))
-      .then(() => {
-        window.location.href = "/admin";
-      })
-      .catch((requestError: Error) => setError(requestError.message));
+    try {
+      await adminLogin(String(data.get("email")), String(data.get("password")));
+      setLocation("/admin");
+    } catch (requestError: any) {
+      setError(requestError.message);
+    }
   };
 
   return (

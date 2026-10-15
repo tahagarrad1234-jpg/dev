@@ -1,12 +1,11 @@
-import { index, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 export const amalUsers = pgTable(
   "amal_users",
   {
-    id: text("id").primaryKey(),
+    id: uuid("id").primaryKey(),
     name: text("name").notNull(),
     email: text("email").notNull(),
-    passwordHash: text("password_hash"),
     role: text("role", { enum: ["customer", "admin"] })
       .notNull()
       .default("customer"),
@@ -20,8 +19,8 @@ export const amalUsers = pgTable(
 export const amalSessions = pgTable(
   "amal_sessions",
   {
-    token: text("token").primaryKey(),
-    userId: text("user_id")
+    tokenHash: text("token_hash").primaryKey(),
+    userId: uuid("user_id")
       .notNull()
       .references(() => amalUsers.id, { onDelete: "cascade" }),
     expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
